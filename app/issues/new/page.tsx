@@ -14,7 +14,7 @@ import Spinner from "@/app/components/Spinner";
 
 type IssueForm = z.infer<typeof createIssueSchema>;
 
-const NewIssuePage = () => {
+const NewIssuePage = async () => {
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const {
@@ -37,7 +37,6 @@ const NewIssuePage = () => {
       setError("An unexpected error occured");
     }
   });
-
   return (
     <div className="max-w-xl">
       {error && (
