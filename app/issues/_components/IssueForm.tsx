@@ -8,7 +8,7 @@ import { Button, Callout, TextField } from "@radix-ui/themes";
 import axios from "axios";
 import "easymde/dist/easymde.min.css";
 import dynamic from "next/dynamic";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -34,7 +34,6 @@ const IssueFrom = async ({ issue }: Props) => {
     resolver: zodResolver(issueSchema),
   });
   const router = useRouter();
-  const pathname = usePathname();
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -43,8 +42,9 @@ const IssueFrom = async ({ issue }: Props) => {
         await axios.patch("/api/issue/" + issue.id, data);
       } else {
         await axios.post("/api/issue", data);
-        router.push("/issues");
       }
+      router.push("/issues");
+      router.refresh();
     } catch (error) {
       setIsSubmitting(false);
       setError("An unexpected error occured");
