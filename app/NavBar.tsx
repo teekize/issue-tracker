@@ -7,6 +7,7 @@ import {
   Flex,
   Text,
 } from "@radix-ui/themes";
+import { Skeleton } from "@/app/components";
 import classNames from "classnames";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -86,6 +87,7 @@ const AccountDropDown = () => {
           Sign in
         </Link>
       )}
+      {status === "loading" && <Skeleton width="3rem" />}
     </Box>
   );
 };
