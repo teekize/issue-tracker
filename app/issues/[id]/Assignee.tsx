@@ -1,19 +1,13 @@
 "use client";
+import { Skeleton } from "@/app/components";
 import { Issue, User } from "@prisma/client";
 import { Select } from "@radix-ui/themes";
-import { Skeleton } from "@/app/components";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import React from "react";
 import toast, { Toaster } from "react-hot-toast";
 
 const Assignee = ({ issue }: { issue: Issue }) => {
-  const { data: users, error, isLoading } = useQuery<User[]>({
-    queryKey: ["users"],
-    queryFn: () => axios.get("/api/users").then((res) => res.data),
-    staleTime: 60 * 1000,
-    retry: 3,
-  });
+  const { data: users, error, isLoading } = useUsers();
 
   if (error) return null;
 
@@ -52,4 +46,12 @@ const Assignee = ({ issue }: { issue: Issue }) => {
   );
 };
 
+const useUsers = () => {
+  return useQuery<User[]>({
+    queryKey: ["users"],
+    queryFn: () => axios.get("/api/users").then((res) => res.data),
+    staleTime: 60 * 1000,
+    retry: 3,
+  });
+};
 export default Assignee;
