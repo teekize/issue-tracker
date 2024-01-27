@@ -1,14 +1,16 @@
 import { Table } from "@radix-ui/themes";
 import prisma from "../../prisma/client";
 import IssueStatusBadge from "../components/IssueStatusBadge";
-import Link from "../components/Link";
+import NextLink from "next/link";
 import IssueActions from "./IssueActions";
-import { Status } from "@prisma/client";
+import { Issue, Status } from "@prisma/client";
+import { Link } from "../components";
+import { ArrowUpIcon } from "@radix-ui/react-icons";
 
 const Issues = async ({
   searchParams,
 }: {
-  searchParams: { status: Status };
+  searchParams: { status: Status; orderBy: keyof Issue };
 }) => {
   const validStatus = Object.values(Status);
   const status = validStatus.includes(searchParams.status)
@@ -16,6 +18,12 @@ const Issues = async ({
     : undefined;
 
   const issues = await prisma.issue.findMany({ where: { status } });
+
+  const columns: { label: string; value: keyof Issue; className?: string }[] = [
+    { label: "Title", value: "title" },
+    { label: "Status", value: "status", className: "hidden md:table-cell" },
+    { label: "Created", value: "createdAt", className: "hidden md:table-cell" },
+  ];
   return (
     <div>
       <IssueActions />
@@ -23,13 +31,20 @@ const Issues = async ({
       <Table.Root variant="surface">
         <Table.Header>
           <Table.Row>
-            <Table.ColumnHeaderCell>Issue</Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell className="hidden md:table-cell">
-              Status
-            </Table.ColumnHeaderCell>
-            <Table.ColumnHeaderCell className="hidden md:table-cell">
-              Created
-            </Table.ColumnHeaderCell>
+            {columns.map((col) => (
+              <Table.ColumnHeaderCell key={col.value}>
+                <NextLink
+                  href={{
+                    query: { ...searchParams, orderBy: col.value },
+                  }}
+                >
+                  {col.label}
+                </NextLink>
+                {col.value === searchParams.orderBy && (
+                  <ArrowUpIcon className="inline" />
+                )}
+              </Table.ColumnHeaderCell>
+            ))}
           </Table.Row>
         </Table.Header>
         <Table.Body>
