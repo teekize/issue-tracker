@@ -12,18 +12,26 @@ const Issues = async ({
 }: {
   searchParams: { status: Status; orderBy: keyof Issue };
 }) => {
-  const validStatus = Object.values(Status);
-  const status = validStatus.includes(searchParams.status)
-    ? searchParams.status
-    : undefined;
-
-  const issues = await prisma.issue.findMany({ where: { status } });
-
   const columns: { label: string; value: keyof Issue; className?: string }[] = [
     { label: "Title", value: "title" },
     { label: "Status", value: "status", className: "hidden md:table-cell" },
     { label: "Created", value: "createdAt", className: "hidden md:table-cell" },
   ];
+  const validStatus = Object.values(Status);
+  const status = validStatus.includes(searchParams.status)
+    ? searchParams.status
+    : undefined;
+
+  const orderBy = columns
+    .map((column) => column.value)
+    .includes(searchParams.orderBy)
+    ? { [searchParams.orderBy]: "asc" }
+    : undefined;
+  const issues = await prisma.issue.findMany({
+    where: { status },
+    orderBy,
+  });
+
   return (
     <div>
       <IssueActions />
