@@ -7,6 +7,7 @@ import { Issue, Status } from "@prisma/client";
 import { Link } from "../components";
 import { ArrowUpIcon } from "@radix-ui/react-icons";
 import Pagination from "../components/Pagination";
+import { Metadata } from "next";
 
 const Issues = async ({
   searchParams,
@@ -96,3 +97,8 @@ const Issues = async ({
 export const dynamic = "force-dynamic";
 
 export default Issues;
+
+export const metadata: Metadata = {
+  title: "Issue Tracker - issue list",
+  description: "View a list of project issues",
+};
