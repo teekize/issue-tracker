@@ -1,4 +1,4 @@
-import { Table } from "@radix-ui/themes";
+import { Flex, Table } from "@radix-ui/themes";
 import prisma from "../../prisma/client";
 import IssueStatusBadge from "../components/IssueStatusBadge";
 import NextLink from "next/link";
@@ -41,7 +41,7 @@ const Issues = async ({
   const issueCount = await prisma.issue.count({ where: { status } });
 
   return (
-    <div>
+    <Flex direction="column" gap="3">
       <IssueActions />
 
       <Table.Root variant="surface">
@@ -89,7 +89,7 @@ const Issues = async ({
         itemCount={issueCount}
         currentPage={page}
       />
-    </div>
+    </Flex>
   );
 };
 
