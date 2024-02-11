@@ -16,8 +16,8 @@ const IssueStatusFilter = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   return (
-      <Select.Root
-          defaultValue={searchParams.get("status")||"o"}
+    <Select.Root
+      defaultValue={searchParams.get("status") || "o"}
       onValueChange={(status) => {
         const params = new URLSearchParams();
         if (status) {
@@ -34,8 +34,10 @@ const IssueStatusFilter = () => {
     >
       <Select.Trigger placeholder="Filter status ..." />
       <Select.Content>
-        {statuses.map((status) => (
-          <Select.Item value={status.status || "o"}>{status.label}</Select.Item>
+        {statuses.map((status, index) => (
+          <Select.Item key={index} value={status.status || "o"}>
+            {status.label}
+          </Select.Item>
         ))}
       </Select.Content>
     </Select.Root>
